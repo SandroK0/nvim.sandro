@@ -710,6 +710,36 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         -- ts_ls = {},
         --
 
+        html = {},
+
+        -- CSS
+        cssls = {},
+
+        -- PHP
+        intelephense = {
+          settings = {
+            intelephense = {
+              files = {
+                maxSize = 5000000, -- Increase the max file size if needed
+              },
+            },
+          },
+        },
+
+        pyright = {
+          settings = {
+            python = {
+              pythonPath = vim.fn.system('which python'):gsub('%s+', ''), -- Automatically find the Python interpreter
+              analysis = {
+                typeCheckingMode = 'basic', -- Can be "off", "basic", or "strict"
+                autoImportCompletions = true, -- Enable auto-import suggestions
+              },
+            },
+          },
+        },
+
+        ts_ls = {},
+
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -798,11 +828,22 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = {
+          'prettierd', -- Use Prettier for JavaScript
+          'prettier',
+          stop_after_first = true,
+        },
+        typescript = {
+          'prettierd', -- Use Prettier for TypeScript
+          'prettier',
+          stop_after_first = true,
+        },
+        html = { 'prettier' }, -- Use Prettier for HTML
+        css = { 'prettier' }, -- Use Prettier for CSS
+        php = { 'phpcbf' }, -- Use PHP Code Beautifier and Fixer for PHP
+        json = { 'jq' }, -- Use jq for formatting JSON
+        markdown = { 'prettier' }, -- Use Prettier for Markdown
+        -- Add additional formatters for other languages here
       },
     },
   },
@@ -890,22 +931,33 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       }
     end,
   },
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'Mofiqul/vscode.nvim',
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'vscode'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    version = '*',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+      'MunifTanjim/nui.nvim',
+    },
+    cmd = 'Neotree',
+    keys = {
+      { '<C-e>', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    },
+    opts = {
+      filesystem = {
+        window = {
+          mappings = {
+            ['<C-e>'] = 'close_window',
+          },
+        },
+      },
+    },
+  },
+  {
+    'EdenEast/nightfox.nvim',
+    priority = 10000,
+    config = function()
+      vim.cmd.colorscheme 'carbonfox' -- Move this here to ensure it runs after the plugin is loaded.
     end,
   }, -- Highlight todo, notes, etc in comments
   {
