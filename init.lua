@@ -90,7 +90,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -450,7 +450,7 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, {
         desc = '[S]earch [K]eymaps',
       })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, {
+      vim.keymap.set('n', '<leader>sf', builtin.git_files, {
         desc = '[S]earch [F]iles',
       })
       vim.keymap.set('n', '<leader><leader>', builtin.find_files, {
@@ -711,7 +711,16 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         --
 
         html = {},
-
+        clangd = {
+          arguments = {
+            '--header-insertion=never',
+            '--all-scopes-completion',
+            '--pch-storage=memory',
+            '-j=4',
+            '--malloc-trim',
+            '--background-index',
+          },
+        },
         -- CSS
         cssls = {},
 
@@ -729,7 +738,7 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         pyright = {
           settings = {
             python = {
-              pythonPath = vim.fn.system('which python'):gsub('%s+', ''), -- Automatically find the Python interpreter
+              -- pythonPath = vim.fn.system('which python'):gsub('%s+', ''), -- Automatically find the Python interpreter
               analysis = {
                 typeCheckingMode = 'basic', -- Can be "off", "basic", or "strict"
                 autoImportCompletions = true, -- Enable auto-import suggestions
@@ -769,6 +778,12 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettier',
+        'prettierd',
+        'phpcbf',
+        'jq',
+        'autopep8',
+        'ast-grep',
       })
       require('mason-tool-installer').setup {
         ensure_installed = ensure_installed,
@@ -838,11 +853,15 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
           'prettier',
           stop_after_first = true,
         },
+        python = { 'autopep8' },
         html = { 'prettier' }, -- Use Prettier for HTML
         css = { 'prettier' }, -- Use Prettier for CSS
         php = { 'phpcbf' }, -- Use PHP Code Beautifier and Fixer for PHP
         json = { 'jq' }, -- Use jq for formatting JSON
         markdown = { 'prettier' }, -- Use Prettier for Markdown
+        jsx = { 'ast-grep' },
+        cpp = { 'ast-grep' },
+        c = { 'ast-grep' },
         -- Add additional formatters for other languages here
       },
     },
@@ -954,10 +973,11 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
     },
   },
   {
-    'EdenEast/nightfox.nvim',
+    'rose-pine/neovim',
+    -- 'EdenEast/nightfox.nvim',
     priority = 10000,
     config = function()
-      vim.cmd.colorscheme 'carbonfox' -- Move this here to ensure it runs after the plugin is loaded.
+      vim.cmd.colorscheme 'rose-pine' -- Move this here to ensure it runs after the plugin is loaded.
     end,
   }, -- Highlight todo, notes, etc in comments
   {
@@ -1022,6 +1042,7 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         'python',
         'bash',
         'c',
+        'cpp',
         'diff',
         'html',
         'lua',
