@@ -205,6 +205,10 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', {
   desc = 'Move focus to the upper window',
 })
 
+vim.keymap.set('n', '<A-Up>', ':move -2<CR>==', { desc = 'Move line up', silent = true })
+
+vim.keymap.set('n', '<A-Down>', ':move +1<CR>==', { desc = 'Move line down', silent = true })
+
 vim.keymap.set('n', '<leader>e', '<cmd>Ex<CR>', {
   desc = 'Open Netrw file explorer',
 })
@@ -709,8 +713,43 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
-        html = {},
+        html = {
+          filetypes = { 'html', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+          settings = {
+            html = {
+              format = {
+                templating = true,
+                wrapLineLength = 120,
+                wrapAttributes = 'auto',
+              },
+              hover = {
+                documentation = true,
+                references = true,
+              },
+              -- Enhanced HTML specific features
+              completion = {
+                useScaffoldSnippets = true,
+              },
+              suggest = {
+                html5 = true,
+              },
+              validate = {
+                scripts = true,
+                styles = true,
+              },
+            },
+          },
+          -- Add HTML-specific capabilities
+          capabilities = vim.tbl_deep_extend('force', capabilities or {}, {
+            textDocument = {
+              completion = {
+                completionItem = {
+                  snippetSupport = true,
+                },
+              },
+            },
+          }),
+        },
         clangd = {
           arguments = {
             '--header-insertion=never',
@@ -725,14 +764,147 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         cssls = {},
 
         -- PHP
+
         intelephense = {
           settings = {
             intelephense = {
               files = {
-                maxSize = 5000000, -- Increase the max file size if needed
+                maxSize = 5000000,
+                associations = { '*.php', '*.phtml' },
+                exclude = {
+                  '**/.git/**',
+                  '**/.svn/**',
+                  '**/.hg/**',
+                  '**/CVS/**',
+                  '**/.DS_Store/**',
+                  '**/node_modules/**',
+                  '**/bower_components/**',
+                  '**/vendor/**/{Tests,tests}/**',
+                },
               },
+              environment = {
+                includePaths = {}, -- Add any additional include paths here
+              },
+              completion = {
+                insertUseDeclaration = true, -- Automatically insert use declarations
+                fullyQualifyGlobalConstantsAndFunctions = false, -- Prevent full qualification
+                triggerParameterHints = true, -- Show parameter hints
+                maxItems = 100, -- Maximum number of completion items
+              },
+              format = {
+                enable = true, -- Enable formatting
+              },
+              diagnostics = {
+                enable = true, -- Enable diagnostics
+                undefinedSymbols = true, -- Report undefined symbols
+                undefinedVariables = true, -- Report undefined variables
+                undefinedMethods = true, -- Report undefined methods
+                undefinedTypes = true, -- Report undefined types
+                undefinedFunctions = true, -- Report undefined functions
+              },
+              stubs = {
+                -- List of built-in PHP extensions you commonly use
+                'apache',
+                'bcmath',
+                'bz2',
+                'calendar',
+                'com_dotnet',
+                'Core',
+                'crud',
+                'curl',
+                'date',
+                'dba',
+                'dom',
+                'enchant',
+                'exif',
+                'FFI',
+                'fileinfo',
+                'filter',
+                'fpm',
+                'ftp',
+                'gd',
+                'gettext',
+                'gmp',
+                'hash',
+                'iconv',
+                'imap',
+                'intl',
+                'json',
+                'ldap',
+                'libxml',
+                'mbstring',
+                'meta',
+                'mysqli',
+                'oci8',
+                'odbc',
+                'openssl',
+                'pcntl',
+                'pcre',
+                'PDO',
+                'pdo_ibm',
+                'pdo_mysql',
+                'pdo_pgsql',
+                'pdo_sqlite',
+                'pgsql',
+                'Phar',
+                'posix',
+                'pspell',
+                'readline',
+                'Reflection',
+                'session',
+                'shmop',
+                'SimpleXML',
+                'snmp',
+                'soap',
+                'sockets',
+                'sodium',
+                'SPL',
+                'sqlite3',
+                'standard',
+                'superglobals',
+                'sysvmsg',
+                'sysvsem',
+                'sysvshm',
+                'tidy',
+                'tokenizer',
+                'xml',
+                'xmlreader',
+                'xmlrpc',
+                'xmlwriter',
+                'xsl',
+                'Zend OPcache',
+                'zip',
+                'zlib',
+              },
+              telemetry = {
+                enable = false, -- Disable telemetry
+              },
+              -- PHP version-specific features
+              phpdoc = {
+                useFullyQualifiedNames = false, -- Don't use fully qualified names in docblocks
+              },
+              rename = {
+                import = true, -- Import symbols when renaming
+              },
+              -- Add common PHP functions to suggestions
             },
           },
+          capabilities = vim.tbl_deep_extend('force', capabilities or {}, {
+            textDocument = {
+              completion = {
+                completionItem = {
+                  snippetSupport = true,
+                  resolveSupport = {
+                    properties = {
+                      'documentation',
+                      'detail',
+                      'additionalTextEdits',
+                    },
+                  },
+                },
+              },
+            },
+          }),
         },
 
         pyright = {
@@ -777,10 +949,12 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'html-lsp',
+        'emmet-ls',
         'stylua', -- Used to format Lua code
         'prettier',
         'prettierd',
-        'phpcbf',
+        'pretty-php',
         'jq',
         'autopep8',
         'ast-grep',
@@ -856,7 +1030,7 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         python = { 'autopep8' },
         html = { 'prettier' }, -- Use Prettier for HTML
         css = { 'prettier' }, -- Use Prettier for CSS
-        php = { 'phpcbf' }, -- Use PHP Code Beautifier and Fixer for PHP
+        php = { 'pretty-php' }, -- Use PHP Code Beautifier and Fixer for PHP
         json = { 'jq' }, -- Use jq for formatting JSON
         markdown = { 'prettier' }, -- Use Prettier for Markdown
         jsx = { 'ast-grep' },
@@ -990,6 +1164,10 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
     },
     { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = false, priority = 1000 },
     { 'navarasu/onedark.nvim' },
+    { 'aliqyan-21/darkvoid.nvim' },
+    { 'folke/tokyonight.nvim' },
+    { 'rebelot/kanagawa.nvim' },
+    { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
     {
       'LazyVim/LazyVim',
       priority = 10000,
@@ -1049,7 +1227,11 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    dependencies = {
+      'windwp/nvim-ts-autotag', -- Auto close and rename HTML tags
+    },
     build = ':TSUpdate',
+
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
@@ -1070,8 +1252,25 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         'query',
         'vim',
         'vimdoc',
+        'tsx',
       },
       -- Autoinstall languages that are not installed
+      autotag = {
+        enable = true,
+        filetypes = {
+          'html',
+          'xml',
+          'javascript',
+          'typescript',
+          'javascriptreact',
+          'typescriptreact',
+          'svelte',
+          'vue',
+          'tsx',
+          'jsx',
+          'markdown',
+        },
+      },
       auto_install = true,
       highlight = {
         enable = true,
