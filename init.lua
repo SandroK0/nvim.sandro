@@ -1119,11 +1119,16 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
     },
     {
       'rose-pine/neovim',
+      name = 'rose-pine',
       lazy = false,
       priority = 1000,
-      styles = {
-        italic = false,
-      },
+      config = function()
+        require('rose-pine').setup {
+          styles = {
+            italic = false,
+          },
+        }
+      end,
     },
     {
       'EdenEast/nightfox.nvim',
