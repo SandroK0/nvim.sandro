@@ -88,9 +88,10 @@ P.S. You can delete this when you're done too. It's your config now! :)
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.opt.termguicolors = true
+vim.g.have_nerd_font = true
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -679,7 +680,7 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         -- ts_ls = {},
         --
         html = {
-          filetypes = { 'html', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+          filetypes = { 'html' },
           settings = {
             html = {
               format = {
@@ -875,7 +876,6 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
         pyright = {
           settings = {
             python = {
-              -- pythonPath = vim.fn.system('which python'):gsub('%s+', ''), -- Automatically find the Python interpreter
               analysis = {
                 typeCheckingMode = 'basic', -- Can be "off", "basic", or "strict"
                 autoImportCompletions = true, -- Enable auto-import suggestions
@@ -983,12 +983,10 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       formatters_by_ft = {
         lua = { 'stylua' },
         javascript = {
-          'prettierd', -- Use Prettier for JavaScript
           'prettier',
           stop_after_first = true,
         },
         typescript = {
-          'prettierd', -- Use Prettier for TypeScript
           'prettier',
           stop_after_first = true,
         },
@@ -1090,28 +1088,6 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
     end,
   },
   {
-    'nvim-neo-tree/neo-tree.nvim',
-    version = '*',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-      'MunifTanjim/nui.nvim',
-    },
-    cmd = 'Neotree',
-    keys = {
-      { '<C-t>', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-    },
-    opts = {
-      filesystem = {
-        window = {
-          mappings = {
-            ['<C-t>'] = 'close_window',
-          },
-        },
-      },
-    },
-  },
-  {
     {
       'slugbyte/lackluster.nvim',
       lazy = false,
@@ -1127,6 +1103,13 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
           styles = {
             italic = false,
           },
+          highlight_groups = {
+            Normal = { bg = '#000000' },
+            NormalFloat = { bg = '#000000' },
+            NormalNC = { bg = '#000000' },
+            SignColumn = { bg = '#000000' },
+            EndOfBuffer = { bg = '#000000' },
+          },
         }
       end,
     },
@@ -1135,6 +1118,7 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       lazy = false,
       priority = 1000,
     },
+    { 'Mofiqul/vscode.nvim' },
     { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = false, priority = 1000 },
     { 'navarasu/onedark.nvim' },
     { 'aliqyan-21/darkvoid.nvim' },
@@ -1151,7 +1135,7 @@ require('lazy').setup({ -- NOTE: Plugins can be added with a link (or for a gith
       'LazyVim/LazyVim',
       priority = 10000,
       config = function()
-        vim.cmd.colorscheme 'rose-pine-main'
+        vim.cmd.colorscheme 'vscode'
       end,
     },
   }, -- Highlight todo, notes, etc in comments
