@@ -29,6 +29,8 @@ vim.opt.showmode = false
 -- vim.schedule(function()
 --   vim.opt.clipboard = 'unnamedplus'
 -- end)
+-- Enable clipboard support
+-- Map Ctrl+Shift+C to copy to system clipboard in visual mode
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -59,9 +61,9 @@ vim.opt.splitbelow = true
 --  and `:help 'listchars'`
 vim.opt.list = true
 vim.opt.listchars = {
-    tab = '» ',
-    trail = '·',
-    nbsp = '␣'
+  tab = '» ',
+  trail = '·',
+  nbsp = '␣',
 }
 
 -- Preview substitutions live, as you type!
