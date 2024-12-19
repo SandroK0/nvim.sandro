@@ -19,6 +19,7 @@ require('lazy').setup {
     require 'plugins.lualine',
     require 'plugins.telescope',
     require 'plugins.treesitter',
+    require 'plugins.neo-tree',
     require 'plugins.autoformat',
     require 'plugins.lsp',
     {
