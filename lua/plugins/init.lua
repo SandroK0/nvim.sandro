@@ -13,22 +13,13 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup {
     'tpope/vim-sleuth',
     require 'plugins.harpoon',
-    require 'plugins.autocompletion',
     require 'plugins.colorscheme',
     require 'plugins.harpoon',
     require 'plugins.lualine',
     require 'plugins.telescope',
     require 'plugins.treesitter',
     require 'plugins.neo-tree',
-    require 'plugins.autoformat',
     require 'plugins.lsp',
-    {
-        'windwp/nvim-ts-autotag',
-        event = 'InsertEnter', -- Load when entering insert mode
-        config = function()
-            require('nvim-ts-autotag').setup()
-        end,
-    },
     { -- Collection of various small independent plugins/modules
         'echasnovski/mini.nvim',
         config = function()
