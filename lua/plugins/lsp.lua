@@ -219,6 +219,11 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'autopep8',
+        'prettier',
+        'prettierd',
+        'pretty-php',
+        'ast-grep',
       })
       require('mason-tool-installer').setup {
         ensure_installed = ensure_installed,
@@ -279,10 +284,14 @@ return {
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
+        python = { 'autopep8' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        php = { 'pretty-php' },
+        go = { 'ast-grep' },
       },
     },
   },
@@ -352,7 +361,7 @@ return {
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm {
+          ['<Enter>'] = cmp.mapping.confirm {
             select = true,
           },
 
