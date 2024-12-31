@@ -19,6 +19,7 @@ require('lazy').setup {
     require 'plugins.telescope',
     require 'plugins.treesitter',
     require 'plugins.neo-tree',
+    require 'plugins.undotree', 
     require 'plugins.lsp',
     { -- Collection of various small independent plugins/modules
         'echasnovski/mini.nvim',
