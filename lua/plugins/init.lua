@@ -21,18 +21,6 @@ require('lazy').setup {
   require 'plugins.neo-tree',
   require 'plugins.undotree',
   require 'plugins.lsp',
-  {
-    'windwp/nvim-ts-autotag',
-    dependencies = 'nvim-treesitter',
-  },
-
-  -- Auto-close quotes, brackets, etc.
-  {
-    'windwp/nvim-autopairs',
-    config = function()
-      require('nvim-autopairs').setup {}
-    end,
-  },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()

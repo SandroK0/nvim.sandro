@@ -1,5 +1,3 @@
--- Neo-tree is a Neovim plugin to browse the file system
--- https://github.com/nvim-neo-tree/neo-tree.nvim
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
@@ -48,6 +46,16 @@ return {
           ['\\'] = 'close_window', -- Close NeoTree with the same key
           ['o'] = 'open', -- Simplified open mapping
         },
+      },
+      cwd_target = 'global', -- Set the root to the global working directory
+    },
+    event_handlers = {
+      {
+        event = 'vim_enter',
+        handler = function()
+          -- Automatically open NeoTree when opening Neovim in a directory
+          require('neo-tree.command').execute { source = 'filesystem', position = 'left' }
+        end,
       },
     },
   },

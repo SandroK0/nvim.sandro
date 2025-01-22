@@ -188,7 +188,16 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
-        gopls = {},
+        gopls = {
+          settings = {
+            gopls = {
+              analyses = {
+                unusedparams = true,
+              },
+              staticcheck = true,
+            },
+          },
+        },
         pyright = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -266,6 +275,8 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'html-lsp',
+        'emmet-ls',
         'autopep8',
         'prettier',
         'prettierd',
@@ -454,12 +465,8 @@ return {
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
+
         sources = {
-          {
-            name = 'lazydev',
-            -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-            group_index = 0,
-          },
           {
             name = 'nvim_lsp',
           },
@@ -469,6 +476,12 @@ return {
           {
             name = 'path',
           },
+          {
+            name = 'buffer',
+          }, -- Add this line for buffer completions
+          {
+            name = 'calc',
+          }, -- Add this line for math calculations
         },
       }
     end,
